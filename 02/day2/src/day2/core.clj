@@ -22,10 +22,6 @@
 ;; if you think using combo/combinations is cheating, here's
 ;; a definition of it just for pairwise combinations
 
-(defn pairwise-combinations-o [c]
-  (partition 2 (flatten (map (fn [[x y]] (map #(sort > (list x %)) y))
-                             (drop-last (map-indexed (fn [n x] (list x (drop (inc n) c))) c))))))
-
 (defn pairwise-combinations [c]
   (->> (map-indexed (fn [n x] (list x (drop (inc n) c))) c)
        (drop-last)
