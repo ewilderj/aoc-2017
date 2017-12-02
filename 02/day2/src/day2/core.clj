@@ -13,3 +13,16 @@
   (apply / (flatten (filter #(= 0 (apply mod %)) (map (partial sort >) (combo/combinations c 2))))))
 
 (println "part2 " (reduce + (map cx inp)))
+
+;; EXTENSION EXERCISE: do it without non-core libraries
+;; if you think using combo/combinations is cheating, here's
+;; my definition of it that i just wrote
+
+(defn pairwise-combinations [c]
+  (partition 2 (flatten (map (fn [[x y]] (map #(sort > (list x %)) y))
+                             (drop-last (map-indexed (fn [n x] (list x (drop (inc n) c))) c))))))
+
+(defn px [c]
+  (apply / (flatten (filter #(= 0 (apply mod %)) (pairwise-combinations c)))))
+
+(println "part2-ex " (reduce + (map px inp)))
