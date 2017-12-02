@@ -12,9 +12,9 @@
 
 (defn cx [c]
   (->> (combo/combinations (sort > c) 2)
-   (filter #(= 0 (apply mod %)))
-   (flatten)
-   (apply /)))
+       (filter #(= 0 (apply mod %)))
+       (flatten)
+       (apply /)))
 
 (println "part2 " (reduce + (map cx inp)))
 
