@@ -25,7 +25,7 @@
 (defn pairwise-combinations [c]
   (->> (map-indexed (fn [n x] (list x (drop (inc n) c))) c)
        (drop-last)
-       (map (fn [[x y]] (map #(sort > (list x %)) y)))
+       (map (fn [[x y]] (map #(list x %) y)))
        (flatten)
        (partition 2)))
 
