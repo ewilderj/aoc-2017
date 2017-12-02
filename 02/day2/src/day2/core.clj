@@ -16,7 +16,7 @@
 
 ;; EXTENSION EXERCISE: do it without non-core libraries
 ;; if you think using combo/combinations is cheating, here's
-;; my definition of it that i just wrote
+;; a definition of it just for sorted pairwise combinations
 
 (defn pairwise-combinations [c]
   (partition 2 (flatten (map (fn [[x y]] (map #(sort > (list x %)) y))
