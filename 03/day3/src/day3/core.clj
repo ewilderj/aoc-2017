@@ -1,5 +1,10 @@
 (ns day3.core)
 
+;;; There are plenty of good solutions that embrace the sequence
+;;; math of this. I went instead for the "fun with Clojure" part.
+;;; for the clever stuff, visit:
+;;;  https://www.reddit.com/r/adventofcode/comments/7h7ufl/2017_day_3_solutions/
+
 (def inp 325489)
 
 ; 1 1 2 2 3 3 4 4 etc
@@ -11,7 +16,6 @@
 ; nth coordinates just apply n moves, indexed at 1
 (defn loc [n] (reduce add-vec [0 0] (take n moves)))
 
-; answer part 1
 (println "part 1" (reduce + (map #(Math/abs %) (loc inp))))
 
 (defn neighbor-coords [p]
