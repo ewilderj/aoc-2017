@@ -8,19 +8,22 @@
   (vec)))
 
 (defn move [c]
-  (loop [ins c pc 0 n 0]
+  (loop [ins (transient c) pc 0 n 0]
     (if (>= pc (count ins)) n
         (let [i (nth ins pc)]
-          (recur (update ins pc inc) (+ pc i) (inc n))))))
+          (recur (assoc! ins pc (inc i)) (+ pc i) (inc n))))))
 
 (defn part1 [] (println (move prog)))
 ;; -> 356945
 
 (defn move2 [c]
-  (loop [ins c pc 0 n 0]
+  (loop [ins (transient c) pc 0 n 0]
     (if (>= pc (count ins)) n
         (let [i (nth ins pc)]
-          (recur (update ins pc (if (>= i 3) dec inc)) (+ pc i) (inc n))))))
+          (recur (assoc! ins pc (if (>= i 3) (dec i) (inc i))) (+ pc i) (inc n))))))
 
 (defn part2 [] (println (move2 prog)))
 ;; -> 28372145
+
+;; using transient took part1 from 447 to 140 msecs (3.1x better)
+;; and part f2 from 35077 msecs to 10926 msecs (3.2x)
