@@ -26,4 +26,4 @@
 ;; -> 28372145
 
 ;; using transient took part1 from 447 to 140 msecs (3.1x better)
-;; and part f2 from 35077 msecs to 10926 msecs (3.2x)
+;; and part2 from 35077 msecs to 10926 msecs (3.2x)
