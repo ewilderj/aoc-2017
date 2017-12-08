@@ -1,6 +1,6 @@
 (ns day6.core)
 
-(def inp [10	3	15	10	5	15	5	15 9	2	5	8	5	2	3	6])
+(def inp [10 3 15 10 5 15 5 15 9 2 5 8 5 2 3 6])
 
 (defn distribute [a i]
   (loop [j (mod (inc i) (count a)) n (nth a i) b (assoc a i 0)]
