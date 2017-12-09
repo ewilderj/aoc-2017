@@ -1,14 +1,12 @@
 (ns day7.core
   (:require [clojure.string :as str]
-            [clojure.walk :as walk]
-            [clojure.set :as s]
-            [clojure.set :as set]))
+            [clojure.set :as s]))
 
 (def test-file "/Users/edd/work/github/aoc-2017/07/day7/test.txt")
 (def puzzle-file "/Users/edd/work/github/aoc-2017/07/day7/puzzle.txt")
 
 (defn read-data
-  "Generate two maps: weights, and discs->parents"
+  "Return a list of two maps: weights, and discs->parents"
   [f]
   (loop [d (str/split-lines (slurp f)) w {} g {}]
     (if (empty? d) (list w g)
@@ -16,8 +14,7 @@
               [_ xn xw] (re-find #"(\w+)\s+\(([0-9]+)" x)
               p (if (nil? c) {}
                      (into {} (map vec (partition 2 (interleave (str/split c #", ") (repeat xn))))))]
-          (recur (rest d) (assoc w xn (Integer/parseInt xw)) (conj g p))
-          ))))
+          (recur (rest d) (assoc w xn (Integer/parseInt xw)) (conj g p))))))
 
 (defn part1 []
   "The parent-less disc is the answer"
