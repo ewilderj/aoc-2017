@@ -45,7 +45,7 @@
             stw (into {} (map vec (partition 2 (interleave ws k))))
 
             ;; look up disc name for odd man out (weight with frequency 1)
-            ono (stw (get (set/map-invert (frequencies ws)) 1))
+            ono (stw (get (s/map-invert (frequencies ws)) 1))
 
             ;; target weight for our children is one with non-1 freq
             tgt (ffirst (filter #(not (= 1 (second %))) (frequencies ws)))]
