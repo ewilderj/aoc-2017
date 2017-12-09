@@ -29,20 +29,30 @@
    (fn [w t n] (reduce + (w n) (map (partial st-weight w t) (kids n t))))))
 
 (defn part2 []
-  (let [[w m] (read-data puzzle-file)
-        root (first (s/difference (set (vals m)) (set (keys m))))]
-    (loop [n root target-weight 0]
-      (let [k (map first (filter #(= n (second %)) m)) ;; stacked discs
+  (let [[w m] (read-data puzzle-file)]
+
+    ;; start at root
+    (loop [n (first (s/difference (set (vals m)) (set (keys m))))
+           target-weight 0]
+
+      (let [;; which disks are stacked on this node?
+            k (map first (filter #(= n (second %)) m))
+
             ;; compute stacked tower weights
             ws (map (partial st-weight w m) k)
+
             ;; reverse map of disc names to weights: ok lossy because we
             ;; only care about identifying the odd-disc-out
             stw (into {} (map vec (partition 2 (interleave ws k))))
+
             ;; look up disc name for odd man out (weight with frequency 1)
             ono (stw (get (set/map-invert (frequencies ws)) 1))
+
             ;; target weight for our children is one with non-1 freq
             tgt (ffirst (filter #(not (= 1 (second %))) (frequencies ws)))]
-        ;; if no odd-man-out, then weight is previous target - kids wt
+
+        ;; if no odd-man-out, return the weight we ought to be
         (if (nil? ono) (- target-weight (reduce + ws))
-            (recur ono tgt))
-        ))))
+
+            ;; otherwise, search the odd man out stack
+            (recur ono tgt))))))
