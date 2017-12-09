@@ -19,7 +19,9 @@
 (defn part1 []
   "The parent-less disc is the answer"
   (let [[w m] (read-data puzzle-file)]
-    (s/difference (set (vals m)) (set (keys m)))))
+    (first (s/difference (set (vals m)) (set (keys m))))))
+
+(defn kids [n m] (map first (filter #(= n (second %)) m)))
 
 (def st-weight
   (memoize
@@ -33,7 +35,7 @@
            target-weight 0]
 
       (let [;; which disks are stacked on this node?
-            k (map first (filter #(= n (second %)) m))
+            k (kids n m)
 
             ;; compute stacked tower weights
             ws (map (partial st-weight w m) k)
