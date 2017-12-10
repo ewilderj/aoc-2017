@@ -30,14 +30,12 @@
 (defn read-reg [registers r] (get registers r 0))
 
 (def != not=)
-(defn test-cond [registers condition]
-  (let [{r :reg op :op v :val} condition]
-    (apply (eval op) (list (read-reg registers r) v))))
+(defn test-cond [registers {r :reg op :op v :val}]
+  (apply (eval op) (list (read-reg registers r) v)))
 
-(defn act [registers action]
-  (let [{r :reg op :op v :val} action]
-    (assoc registers r
-           (apply ({'inc + 'dec -} op) (list (read-reg registers r) v)))))
+(defn act [registers {r :reg op :op v :val}]
+  (assoc registers r
+         (apply ({'inc + 'dec -} op) (list (read-reg registers r) v))))
 
 (defn interpret [prog]
   (loop [code prog registers {} m Integer/MIN_VALUE]
