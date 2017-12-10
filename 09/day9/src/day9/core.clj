@@ -12,9 +12,9 @@
 
 (defn random? [c] (not= c \>))
 (s/def ::garbage (s/cat :s #{\<} :u (s/* random?) :e #{\>}))
-(s/def ::content (s/cat :d (s/alt :group ::group :garbage ::garbage)
+(s/def ::content (s/cat :data (s/alt :group ::group :garbage ::garbage)
                         :m (s/? #{\,})))
-(s/def ::group (s/cat :x #{\{} :c (s/* ::content) :y #{\}}))
+(s/def ::group (s/cat :x #{\{} :content (s/* ::content) :y #{\}}))
 
 (def test-garbage ["<>", "<jshdkjdhsf>", "<<<<>", "<{!>}>", "<!!>",
                    "<!!!>>", "<{o\"i!a,<{i<a>"])
@@ -31,9 +31,9 @@
 
 (defn count-in [g n]
   (conj
-   (if-let [c (:c g)]
+   (if-let [c (:content g)]
      (->> c
-          (map :d)
+          (map :data)
           (filter #(#{:group} (first %)))
           (map #(count-in (second %) (inc n)))
           )) n))
@@ -43,9 +43,12 @@
 
 (defn count-garbage [g]
   (let [gf (fn [[t m]] (if (= :group t) (count-garbage m) (count (:u m))))
-        c (:c g)]
+        c (:content g)]
   (if (nil? c) (list 0)
-    (->> c (map :d) (filter #(#{:group :garbage} (first %))) (map gf)))))
+      (->> c
+           (map :data)
+           (filter #(#{:group :garbage} (first %)))
+           (map gf)))))
 
 (defn part2 []
   (reduce + (flatten (count-garbage (s/conform ::group (remove-ignored inp))))))
