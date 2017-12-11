@@ -14,20 +14,13 @@
 (defn rev-and-move [l n m p]
   (take m (drop (mod (- p) m) (cycle (reverse-n l n m p)))))
 
-(defn interpret [prog l max-range cur skip]
-  (loop [prog prog l l cur cur skip skip]
-    (if (empty? prog) (list l cur skip)
+(defn interpret [prog max-range]
+  (loop [prog prog l (range max-range) cur 0 skip 0]
+    (if (empty? prog) l
         (recur (rest prog)
                (rev-and-move l (first prog) max-range cur)
                (mod (+ cur skip (first prog)) max-range)
                (inc skip)))))
-
-(defn sixty-four [prog max-range]
-  (loop [n 64 l (range max-range) cur 0 skip 0]
-    (if (= n 0) l
-        (let [[l2 ncur nskip]
-              (interpret prog l max-range (mod cur max-range) skip)]
-          (recur (dec n) l2 ncur nskip)))))
 
 (defn make-hash [sparse-hash]
     (->> sparse-hash
@@ -36,6 +29,5 @@
          (map #(format "%02x" %))
          (apply str)))
 
-(println "part1" (apply * (take 2 (first (interpret inp1 (range 256) 256 0 0)))))
-(println "part2" (make-hash (sixty-four inp2 256)))
-
+(println "part1" (apply * (take 2 (interpret inp1 256))))
+(println "part2" (make-hash (interpret (flatten (repeat 64 inp2)) 256)))
